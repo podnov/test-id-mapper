@@ -20,6 +20,7 @@ public abstract class AbstractTestIdMapper<ReferrerType, ReferencePersistenceTyp
 			String message = String.format("Found [%s] persisted references and [%s] test references. In order to map correctly, the persisted references and test references must map 1-to-1 in order",
 					persistedReferenceCount,
 					testReferenceCount);
+			throw new IllegalArgumentException(message);
 		}
 
 		for (int i = 0; i < persistedReferenceCount; i++) {
