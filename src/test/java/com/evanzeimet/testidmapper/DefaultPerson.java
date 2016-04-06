@@ -3,9 +3,25 @@ package com.evanzeimet.testidmapper;
 
 public class DefaultPerson implements Person {
 
+	private String name;
 	private Long organizationId;
 	private String organizationTestId;
 
+	public DefaultPerson() {
+
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
 	public Long getOrganizationId() {
 		return organizationId;
 	}
@@ -20,6 +36,7 @@ public class DefaultPerson implements Person {
 		return organizationTestId;
 	}
 
+	@Override
 	public void setOrganizationTestId(String organizationTestId) {
 		this.organizationTestId = organizationTestId;
 	}

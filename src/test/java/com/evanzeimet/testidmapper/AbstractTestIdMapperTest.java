@@ -2,90 +2,64 @@ package com.evanzeimet.testidmapper;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
 public class AbstractTestIdMapperTest {
 
-	private static final String FACEBOOK = "Facebook";
-	private static final String GOOGLE = "Google";
+	private static final Type ORGANIZATION_ENTITIES_LIST_TYPE = new TypeReference<List<OrganizationEntity>>() {
+	}.getType();
+
+	private static final Type PEOPLE_LIST_TYPE = new TypeReference<List<DefaultPerson>>() {
+	}.getType();
+
+	private static final Type TEST_ORGANIZATION_LIST_TYPE = new TypeReference<List<OrganizationEntity>>() {
+	}.getType();
 
 	private PersonToOrganizationIdMapper idMapper;
+
+	private TestUtils testUtils;
 
 	@Before
 	public void setUp() {
 		idMapper = new PersonToOrganizationIdMapper();
+
+		testUtils = new TestUtils();
 	}
 
 	@Test
-	public void test() {
-		List<OrganizationEntity> organizationEntities = new ArrayList<>();
-		OrganizationEntity googleEntity;
-		OrganizationEntity facebookEntity;
+	public void test() throws JsonParseException,
+			JsonMappingException,
+			IOException {
+		String givenOrganizationEntitiesJson = testUtils.readRelativeResource("AbstractTestIdMapperTest_test_givenOrganizationEntities.json");
+		String givenTestOrganizationsJson = testUtils.readRelativeResource("AbstractTestIdMapperTest_test_givenTestOrganizations.json");
 
-		{
-			googleEntity = new OrganizationEntity();
-			googleEntity.setId(24L);
+		List<OrganizationEntity> givenOrganizationEntities = testUtils.readType(givenOrganizationEntitiesJson,
+				ORGANIZATION_ENTITIES_LIST_TYPE);
+		List<OrganizationEntity> givenTestOrganizations = testUtils.readType(givenTestOrganizationsJson,
+				TEST_ORGANIZATION_LIST_TYPE);
 
-			organizationEntities.add(googleEntity);
-		}
+		idMapper.mapReferenceActualPersistenceIdsToGivenTestIds(givenOrganizationEntities, givenTestOrganizations);
 
-		{
-			facebookEntity = new OrganizationEntity();
-			facebookEntity.setId(42L);
-			organizationEntities.add(facebookEntity);
-		}
+		String givenPeopleJson = testUtils.readRelativeResource("AbstractTestIdMapperTest_test_givenPeople.json");
 
-		List<TestOrganization> testOrganizations = new ArrayList<>();
-		TestOrganization testOrganization;
+		List<Person> people = testUtils.readType(givenPeopleJson,
+				PEOPLE_LIST_TYPE);
 
-		{
-			testOrganization = new TestOrganization();
-			testOrganization.setTestId(GOOGLE);
+		idMapper.setReferrerExpectedPersistenceIdsForGivenTestIds(people);
 
-			testOrganizations.add(testOrganization);
-		}
+		String actualPeopleJson = testUtils.stringify(people);
+		String expectedPeopleJson = testUtils.readRelativeResource("AbstractTestIdMapperTest_test_expectedPeople.json");
 
-		{
-			testOrganization = new TestOrganization();
-			testOrganization.setTestId(FACEBOOK);
-
-			testOrganizations.add(testOrganization);
-		}
-
-		idMapper.mapReferenceIds(organizationEntities, testOrganizations);
-
-		List<Person> people = new ArrayList<>();
-		DefaultPerson evan;
-		DefaultPerson skye;
-
-		{
-			evan = new DefaultPerson();
-			evan.setOrganizationTestId(GOOGLE);
-
-			people.add(evan);
-		}
-
-		{
-			skye = new DefaultPerson();
-			skye.setOrganizationTestId(FACEBOOK);
-
-			people.add(skye);
-		}
-
-		idMapper.setReferrerReferencePersistenceIdsForTestIds(people);
-
-		Long actualOrganizationId = evan.getOrganizationId();
-		Long expectedOrganizationId = googleEntity.getId();
-
-		assertEquals(expectedOrganizationId, actualOrganizationId);
-
-		actualOrganizationId = skye.getOrganizationId();
-		expectedOrganizationId = facebookEntity.getId();
-
-		assertEquals(expectedOrganizationId, actualOrganizationId);
+		assertEquals(expectedPeopleJson, actualPeopleJson);
 	}
+
 }

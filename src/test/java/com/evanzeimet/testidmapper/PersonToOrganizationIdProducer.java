@@ -2,26 +2,26 @@ package com.evanzeimet.testidmapper;
 
 
 public class PersonToOrganizationIdProducer
-		implements IdProducer<Person, OrganizationEntity, TestOrganization, Long> {
+		implements IdProducer<Person, OrganizationEntity, OrganizationEntity, Long> {
 
 	@Override
-	public Long produceReferencePersistenceId(OrganizationEntity persistenceReference) {
+	public Long produceReferenceActualPersistenceId(OrganizationEntity persistenceReference) {
 		return persistenceReference.getId();
 	}
 
 	@Override
-	public String produceReferenceTestId(TestOrganization testReference) {
-		return testReference.getTestId();
+	public String produceReferenceGivenTestId(OrganizationEntity testReference) {
+		return testReference.getName();
 	}
 
 	@Override
-	public String produceReferrerReferencedTestId(Person referrer) {
+	public String produceReferrerGivenTestId(Person referrer) {
 		return referrer.getOrganizationTestId();
 	}
 
 	@Override
-	public void setReferrerReferencePersistenceId(Person referrer, Long referencePersistenceId) {
-		referrer.setOrganizationId(referencePersistenceId);
+	public void setReferrerExpectedPersistenceId(Person referrer, Long expectedPersistenceId) {
+		referrer.setOrganizationId(expectedPersistenceId);
 	}
 
 }
