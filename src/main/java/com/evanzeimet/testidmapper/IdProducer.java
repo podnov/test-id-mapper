@@ -3,12 +3,12 @@ package com.evanzeimet.testidmapper;
 
 public interface IdProducer<ReferrerType, ReferencePersistenceType, ReferenceTestType, ReferencePersistenceIdType> {
 
-	ReferencePersistenceIdType produceReferencePersistenceId(ReferencePersistenceType persistenceReference);
+	ReferencePersistenceIdType produceReferenceActualPersistenceId(ReferencePersistenceType persistenceReference);
 
-	String produceReferenceTestId(ReferenceTestType testReference);
+	String produceReferenceGivenTestId(ReferenceTestType givenTestReference);
 
-	String produceReferrerReferencedTestId(ReferrerType referrer);
+	String produceReferrerGivenTestId(ReferrerType referrer);
 
-	void setReferrerReferencePersistenceId(ReferrerType referrer,
-			ReferencePersistenceIdType referencePersistenceId);
+	void setReferrerExpectedPersistenceId(ReferrerType referrer,
+			ReferencePersistenceIdType expectedPeristenceId);
 }

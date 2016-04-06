@@ -2,8 +2,16 @@ package com.evanzeimet.testidmapper;
 
 public interface Person {
 
-	void setOrganizationId(Long referencePersistenceId);
+	String getName();
+
+	void setName(String name);
+
+	Long getOrganizationId();
+
+	void setOrganizationId(Long organizationId);
 
 	String getOrganizationTestId();
+
+	void setOrganizationTestId(String organizationTestId);
 
 }
