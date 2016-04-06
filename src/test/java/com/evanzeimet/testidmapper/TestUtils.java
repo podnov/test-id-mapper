@@ -43,8 +43,8 @@ public class TestUtils {
 		return objectMapper.writer(pp);
 	}
 
-	public File getRelativeResource(String relativePath) {
-		String packageName = getClass().getPackage().getName();
+	public File getRelativeResource(Class<?> clazz, String relativePath) {
+		String packageName = clazz.getPackage().getName();
 		String packagePath = packageName.replaceAll("\\.", "/");
 		String wholePath = packagePath + "/" + relativePath;
 
@@ -58,6 +58,13 @@ public class TestUtils {
 		return new File(url.getPath());
 	}
 
+	public <T> T objectify(String json, Type type) throws JsonParseException,
+			JsonMappingException,
+			IOException {
+		JavaType javaType = objectMapper.constructType(type);
+		return objectMapper.readValue(json, javaType);
+	}
+
 	public String readFile(File file) {
 		String result;
 
@@ -67,19 +74,14 @@ public class TestUtils {
 			throw new RuntimeException(e);
 		}
 
+		result = dosToUnix(result);
+
 		return result;
 	}
 
-	public String readRelativeResource(String relativePath) {
-		File file = getRelativeResource(relativePath);
+	public String readRelativeResource(Class<?> clazz, String relativePath) {
+		File file = getRelativeResource(clazz, relativePath);
 		return readFile(file);
-	}
-
-	public <T> T readType(String json, Type type) throws JsonParseException,
-			JsonMappingException,
-			IOException {
-		JavaType javaType = objectMapper.constructType(type);
-		return objectMapper.readValue(json, javaType);
 	}
 
 	public String stringify(Object object) {
