@@ -39,27 +39,34 @@ public class AbstractTestIdMapperTest {
 	public void test() throws JsonParseException,
 			JsonMappingException,
 			IOException {
-		String givenOrganizationEntitiesJson = testUtils.readRelativeResource("AbstractTestIdMapperTest_test_givenOrganizationEntities.json");
-		String givenTestOrganizationsJson = testUtils.readRelativeResource("AbstractTestIdMapperTest_test_givenTestOrganizations.json");
-
-		List<OrganizationEntity> givenOrganizationEntities = testUtils.readType(givenOrganizationEntitiesJson,
+		List<OrganizationEntity> givenOrganizationEntities = objectifyRelativeJsonResource("AbstractTestIdMapperTest_test_givenOrganizationEntities.json",
 				ORGANIZATION_ENTITIES_LIST_TYPE);
-		List<OrganizationEntity> givenTestOrganizations = testUtils.readType(givenTestOrganizationsJson,
+		List<OrganizationEntity> givenTestOrganizations = objectifyRelativeJsonResource("AbstractTestIdMapperTest_test_givenTestOrganizations.json",
 				TEST_ORGANIZATION_LIST_TYPE);
 
 		idMapper.mapReferenceActualPersistenceIdsToGivenTestIds(givenOrganizationEntities, givenTestOrganizations);
 
-		String givenPeopleJson = testUtils.readRelativeResource("AbstractTestIdMapperTest_test_givenPeople.json");
-
-		List<Person> people = testUtils.readType(givenPeopleJson,
+		List<Person> people = objectifyRelativeJsonResource("AbstractTestIdMapperTest_test_givenPeople.json",
 				PEOPLE_LIST_TYPE);
 
 		idMapper.setReferrerExpectedPersistenceIdsForGivenTestIds(people);
 
 		String actualPeopleJson = testUtils.stringify(people);
-		String expectedPeopleJson = testUtils.readRelativeResource("AbstractTestIdMapperTest_test_expectedPeople.json");
+		String expectedPeopleJson = readRelativeResource("AbstractTestIdMapperTest_test_expectedPeople.json");
 
 		assertEquals(expectedPeopleJson, actualPeopleJson);
 	}
 
+	protected <T> T objectifyRelativeJsonResource(String relativePath, Type typeOfT) throws JsonParseException,
+			JsonMappingException,
+			IOException {
+		String givenOrganizationEntitiesJson = readRelativeResource(relativePath);
+		return testUtils.objectify(givenOrganizationEntitiesJson,
+				typeOfT);
+	}
+
+	protected String readRelativeResource(String relativePath) {
+		return testUtils.readRelativeResource(getClass(),
+				relativePath);
+	}
 }

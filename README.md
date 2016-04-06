@@ -1,5 +1,7 @@
 # test-id-mapper
 
+![Build Status](https://travis-ci.org/podnov/test-id-mapper.svg?branch=master)
+
 This utility helps you map static test-time ids to auto-generated persistence ids. Consider this Cucumber feature:
 
 ```
@@ -27,7 +29,9 @@ Feature: Test people REST retrieval
         | Bill | ???            |
 ```
 
-You could make an assumption about the system, and assume that the keys are 1-based every time and expect this:
+How do you verify that the people are associated with the correct organization id if the organization id is generated at run-time? 
+
+You could make an assumption about the system, assume that the keys are 1-based integers every time and expect this:
 
 ```
 Feature: Test people REST retrieval
@@ -42,7 +46,7 @@ Feature: Test people REST retrieval
         | Bill | 2              |
 ```
 
-Now consider adding more data with more relationships. Instead of 2 organizations and 2 people, you've got 20 organizations and 100 people. Add job positions and associate them with people. Associate people with the person record of their supervisor. You quickly end up with a lot of ambiguous, repeated integers everywhere.
+Now consider adding more data with more relationships. Instead of 2 organizations and 2 people, you've got 20 organizations and 100 people. Add job positions and associate them with people. Associate people with the person record of their supervisor. You quickly end up with a lot of ambiguous, repeated integers that are hard to follow around your feature files.
 
 ```
 Feature: Test people REST retrieval
@@ -84,8 +88,6 @@ Feature: Test people REST retrieval
         | Jess | 1              | 3          |              |
         ...
 ```
-
-Those integers are hard to follow around your feature files.
 
 Using test-id-mapper, you can represent these associations like so:
 
@@ -131,9 +133,9 @@ Feature: Test people REST retrieval
         ...
 ```
 
-The work is managed by a [DefaultTestIdMapper](src/main/java/com/evanzeimet/testidmapper/DefaultTestIdMapper.java). The data bits used by the mapper are exposed by a [IdProducer](src/main/java/com/evanzeimet/testidmapper/IdProducer.java).
+The id associations are managed by a [DefaultTestIdMapper](src/main/java/com/evanzeimet/testidmapper/DefaultTestIdMapper.java). The data bits used by the mapper are exposed by an [IdProducer](src/main/java/com/evanzeimet/testidmapper/IdProducer.java).
 
-Using the organization to person mapping scenario, the organization is considered the "Reference," and the person is considered the "Referrer".  The person record refers to the organization by the organization id stored on the person record.
+Using the organization/person mapping scenario, the organization is considered the "Reference," and the person is considered the "Referrer". The person record refers to the organization by the organization id stored on the person record.
 
-An example exists in the tests. [AbstractTestIdMapperTest](src/test/java/com/evanzeimet/testidmapper/AbstractTestIdMapperTest.java) invokes the [PersonToOrganizationIdMapper](src/test/java/com/evanzeimet/testidmapper/PersonToOrganizationIdMapper.java) which extends [DefaultTestIdMapper](src/main/java/com/evanzeimet/testidmapper/DefaultTestIdMapper.java) for the sake of removing the generics markup. The [PersonToOrganizationIdMapper](src/test/java/com/evanzeimet/testidmapper/PersonToOrganizationIdMapper.java) then feeds all records through the [PersonToOrganizationIdProducer](src/test/java/com/evanzeimet/testidmapper/PersonToOrganizationIdProducer.java).
+An example usage exists in the tests. [AbstractTestIdMapperTest](src/test/java/com/evanzeimet/testidmapper/AbstractTestIdMapperTest.java) invokes the [PersonToOrganizationIdMapper](src/test/java/com/evanzeimet/testidmapper/PersonToOrganizationIdMapper.java). The [PersonToOrganizationIdMapper](src/test/java/com/evanzeimet/testidmapper/PersonToOrganizationIdMapper.java) extends [DefaultTestIdMapper](src/main/java/com/evanzeimet/testidmapper/DefaultTestIdMapper.java) for the sake of removing the generics markup. The [PersonToOrganizationIdMapper](src/test/java/com/evanzeimet/testidmapper/PersonToOrganizationIdMapper.java) then feeds all records through the [PersonToOrganizationIdProducer](src/test/java/com/evanzeimet/testidmapper/PersonToOrganizationIdProducer.java).
 
