@@ -39,7 +39,7 @@ public class DefaultTestIdMapper<ReferrerType, ReferencePersistenceType, Referen
 	}
 
 	protected void setReferrerExpectedPersistenceIdForGivenTestId(ReferrerType referrer) {
-		String testId = idProducer.produceReferrerGivenTestId(referrer);
+		String testId = idProducer.produceReferrerExpectedTestId(referrer);
 		ReferencePersistenceIdType persistenceId = idMap.getPersistenceId(testId);
 		idProducer.setReferrerExpectedPersistenceId(referrer, persistenceId);
 	}
