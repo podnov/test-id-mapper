@@ -7,7 +7,7 @@ public interface IdProducer<ReferrerType, ReferencePersistenceType, ReferenceTes
 
 	String produceReferenceGivenTestId(ReferenceTestType givenTestReference);
 
-	String produceReferrerGivenTestId(ReferrerType referrer);
+	String produceReferrerExpectedTestId(ReferrerType referrer);
 
 	void setReferrerExpectedPersistenceId(ReferrerType referrer,
 			ReferencePersistenceIdType expectedPeristenceId);

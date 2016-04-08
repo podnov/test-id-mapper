@@ -15,7 +15,7 @@ public class PersonToOrganizationIdProducer
 	}
 
 	@Override
-	public String produceReferrerGivenTestId(Person referrer) {
+	public String produceReferrerExpectedTestId(Person referrer) {
 		return referrer.getOrganizationTestId();
 	}
 
