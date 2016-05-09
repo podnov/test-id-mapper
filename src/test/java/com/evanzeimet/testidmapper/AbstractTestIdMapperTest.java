@@ -36,23 +36,46 @@ public class AbstractTestIdMapperTest {
 	}
 
 	@Test
-	public void test() throws JsonParseException,
+	public void setReferrerReferencePersistenceIdsForTestIds() throws JsonParseException,
 			JsonMappingException,
 			IOException {
-		List<OrganizationEntity> givenOrganizationEntities = objectifyRelativeJsonResource("AbstractTestIdMapperTest_test_givenOrganizationEntities.json",
+		List<OrganizationEntity> givenOrganizationEntities = objectifyRelativeJsonResource("AbstractTestIdMapperTestResources/setReferrerReferencePersistenceIdsForTestIds/givenOrganizationEntities.json",
 				ORGANIZATION_ENTITIES_LIST_TYPE);
-		List<OrganizationEntity> givenTestOrganizations = objectifyRelativeJsonResource("AbstractTestIdMapperTest_test_givenTestOrganizations.json",
+		List<OrganizationEntity> givenTestOrganizations = objectifyRelativeJsonResource("AbstractTestIdMapperTestResources/setReferrerReferencePersistenceIdsForTestIds/givenTestOrganizations.json",
 				TEST_ORGANIZATION_LIST_TYPE);
 
 		idMapper.mapReferenceActualPersistenceIdsToGivenTestIds(givenOrganizationEntities, givenTestOrganizations);
 
-		List<Person> people = objectifyRelativeJsonResource("AbstractTestIdMapperTest_test_givenPeople.json",
+		List<Person> people = objectifyRelativeJsonResource("AbstractTestIdMapperTestResources/setReferrerReferencePersistenceIdsForTestIds/givenPeople.json",
 				PEOPLE_LIST_TYPE);
 
-		idMapper.setReferrerExpectedPersistenceIdsForGivenTestIds(people);
+		idMapper.setReferrerReferencePersistenceIdsForTestIds(people);
 
 		String actualPeopleJson = testUtils.stringify(people);
-		String expectedPeopleJson = readRelativeResource("AbstractTestIdMapperTest_test_expectedPeople.json");
+		String expectedPeopleJson = readRelativeResource("AbstractTestIdMapperTestResources/setReferrerReferencePersistenceIdsForTestIds/expectedPeople.json");
+
+		assertEquals(expectedPeopleJson, actualPeopleJson);
+	}
+
+	@Test
+	public void setReferrerReferenceTestIdsForPersistenceIds() throws JsonParseException,
+			JsonMappingException,
+			IOException {
+		List<OrganizationEntity> givenOrganizationEntities = objectifyRelativeJsonResource("AbstractTestIdMapperTestResources/setReferrerReferenceTestIdsForPersistenceIds/givenOrganizationEntities.json",
+				ORGANIZATION_ENTITIES_LIST_TYPE);
+		List<OrganizationEntity> givenTestOrganizations = objectifyRelativeJsonResource("AbstractTestIdMapperTestResources/setReferrerReferenceTestIdsForPersistenceIds/givenTestOrganizations.json",
+				TEST_ORGANIZATION_LIST_TYPE);
+
+		idMapper.mapReferenceActualPersistenceIdsToGivenTestIds(givenOrganizationEntities,
+				givenTestOrganizations);
+
+		List<Person> people = objectifyRelativeJsonResource("AbstractTestIdMapperTestResources/setReferrerReferenceTestIdsForPersistenceIds/givenPeople.json",
+				PEOPLE_LIST_TYPE);
+
+		idMapper.setReferrerReferenceTestIdsForPersistenceIds(people);
+
+		String actualPeopleJson = testUtils.stringify(people);
+		String expectedPeopleJson = readRelativeResource("AbstractTestIdMapperTestResources/setReferrerReferenceTestIdsForPersistenceIds/expectedPeople.json");
 
 		assertEquals(expectedPeopleJson, actualPeopleJson);
 	}

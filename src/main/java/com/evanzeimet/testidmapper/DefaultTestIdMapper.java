@@ -35,18 +35,30 @@ public class DefaultTestIdMapper<ReferrerType, ReferencePersistenceType, Referen
 			ReferenceTestType testReference) {
 		ReferencePersistenceIdType persistenceId = idProducer.produceReferenceActualPersistenceId(persistedReference);
 		String testId = idProducer.produceReferenceGivenTestId(testReference);
-		idMap.putPersistenceId(testId, persistenceId);
+		idMap.mapIds(testId, persistenceId);
 	}
 
-	protected void setReferrerExpectedPersistenceIdForGivenTestId(ReferrerType referrer) {
-		String testId = idProducer.produceReferrerExpectedTestId(referrer);
+	protected void setReferrerReferencePersistenceIdForTestId(ReferrerType referrer) {
+		String testId = idProducer.produceReferrersReferenceTestId(referrer);
 		ReferencePersistenceIdType persistenceId = idMap.getPersistenceId(testId);
-		idProducer.setReferrerExpectedPersistenceId(referrer, persistenceId);
+		idProducer.setReferrersReferencePersistenceId(referrer, persistenceId);
 	}
 
-	public void setReferrerExpectedPersistenceIdsForGivenTestIds(List<? extends ReferrerType> referrers) {
+	public void setReferrerReferencePersistenceIdsForTestIds(List<? extends ReferrerType> referrers) {
 		for (ReferrerType referrer : referrers) {
-			setReferrerExpectedPersistenceIdForGivenTestId(referrer);
+			setReferrerReferencePersistenceIdForTestId(referrer);
+		}
+	}
+
+	protected void setReferrerReferenceTestIdForPersistenceId(ReferrerType referrer) {
+		ReferencePersistenceIdType persistenceId = idProducer.produceReferrersReferencePersistenceId(referrer);
+		String testId = idMap.getTestId(persistenceId);
+		idProducer.setReferrersReferenceTestId(referrer, testId);
+	}
+
+	public void setReferrerReferenceTestIdsForPersistenceIds(List<? extends ReferrerType> referrers) {
+		for (ReferrerType referrer : referrers) {
+			setReferrerReferenceTestIdForPersistenceId(referrer);
 		}
 	}
 }
