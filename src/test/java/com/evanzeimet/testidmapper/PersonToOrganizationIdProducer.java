@@ -15,13 +15,23 @@ public class PersonToOrganizationIdProducer
 	}
 
 	@Override
-	public String produceReferrerExpectedTestId(Person referrer) {
+	public Long produceReferrersReferencePersistenceId(Person referrer) {
+		return referrer.getOrganizationId();
+	}
+
+	@Override
+	public String produceReferrersReferenceTestId(Person referrer) {
 		return referrer.getOrganizationTestId();
 	}
 
 	@Override
-	public void setReferrerExpectedPersistenceId(Person referrer, Long expectedPersistenceId) {
-		referrer.setOrganizationId(expectedPersistenceId);
+	public void setReferrersReferencePersistenceId(Person referrer, Long referencePersistenceId) {
+		referrer.setOrganizationId(referencePersistenceId);
+	}
+
+	@Override
+	public void setReferrersReferenceTestId(Person referrer, String referenceTestId) {
+		referrer.setOrganizationTestId(referenceTestId);
 	}
 
 }
