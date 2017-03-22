@@ -4,8 +4,8 @@ import java.util.List;
 
 public class DefaultTestIdMapper<ReferrerType, ReferencePersistenceType, ReferenceTestType, ReferencePersistenceIdType> {
 
-	private final IdGetterAndSetter<ReferrerType, ReferencePersistenceType, ReferenceTestType, ReferencePersistenceIdType> idProducer;
-	private final IdMap<ReferencePersistenceIdType> idMap = new IdMap<>();
+	protected final IdGetterAndSetter<ReferrerType, ReferencePersistenceType, ReferenceTestType, ReferencePersistenceIdType> idProducer;
+	protected final IdMap<ReferencePersistenceIdType> idMap = new IdMap<>();
 
 	public DefaultTestIdMapper(IdGetterAndSetter<ReferrerType, ReferencePersistenceType, ReferenceTestType, ReferencePersistenceIdType> idProducer) {
 		this.idProducer = idProducer;
