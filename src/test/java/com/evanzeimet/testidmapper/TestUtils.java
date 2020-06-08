@@ -1,5 +1,7 @@
 package com.evanzeimet.testidmapper;
 
+import static com.fasterxml.jackson.core.util.DefaultIndenter.SYSTEM_LINEFEED_INSTANCE;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -10,13 +12,11 @@ import org.apache.commons.io.FileUtils;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter.Lf2SpacesIndenter;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
-@SuppressWarnings("deprecation")
 public class TestUtils {
 
 	private final ObjectMapper objectMapper;
@@ -39,7 +39,7 @@ public class TestUtils {
 
 	protected ObjectWriter getObjectMapperWriter() {
 		DefaultPrettyPrinter pp = new DefaultPrettyPrinter();
-		pp.indentArraysWith(new Lf2SpacesIndenter());
+		pp.indentArraysWith(SYSTEM_LINEFEED_INSTANCE);
 		return objectMapper.writer(pp);
 	}
 
